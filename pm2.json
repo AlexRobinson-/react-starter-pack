@@ -1,0 +1,10 @@
+{
+  "apps": [
+    {
+      "name": "react=starter-pack",
+      "script": "build/bundle.server.js",
+      "watch": ["./app/server/*"],
+      "ignore_watch" : ["node_modules", "app/client", "app/shared"]
+    }
+  ]
+}
