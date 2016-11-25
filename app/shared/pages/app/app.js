@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Match, Link } from 'react-router';
-import TodosPage from './../todos-page';
+import TodoModule from './../../modules/todo';
 
 const App = () => (
   <div>
     <h1>Alexs React Starter Pack</h1>
     <Link to='/home'>Home</Link>
     <Link to='/todos'>Todos</Link>
-    <Match pattern="/todos" component={TodosPage}/>
+    <Match pattern="/todos" component={TodoModule}/>
   </div>
 );
 

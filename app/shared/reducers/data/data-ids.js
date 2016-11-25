@@ -13,7 +13,7 @@ const ids = (state = {}, action) => {
         (newState, dataType) => ({
           ...newState,
           [dataType]: new Set([
-            ...(state[dataType] || []),
+            ...(state[dataType] ? Array.from(state[dataType]) : []),
             ...payload.data.result[dataType]
           ])
         }), state
@@ -32,3 +32,5 @@ const ids = (state = {}, action) => {
 };
 
 export default ids;
+
+export const getIds = (state, dataType) => (state[dataType] ? Array.from(state[dataType]) : []);

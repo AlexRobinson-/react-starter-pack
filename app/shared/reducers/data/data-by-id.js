@@ -8,11 +8,15 @@ const byId = (state = {}, action) => {
 
   switch (type) {
     case ADD_DATA:
-      console.log('adding data', payload);
-      return {
-        ...state,
-        ...payload.data.entities
-      };
+      return Object.keys(payload.data.entities).reduce(
+        (newState, dataType) => ({
+          ...state,
+          [dataType]: {
+            ...(newState[dataType] || []),
+            ...payload.data.entities[dataType]
+          }
+        }), state
+      );
     case REMOVE_DATA:
       const ids = Array.isArray(payload.ids) ? payload.ids : [payload.ids];
       const newState = { ...state };
@@ -24,3 +28,5 @@ const byId = (state = {}, action) => {
 };
 
 export default byId;
+
+export const getItem = (state, dataType, id) => state[dataType] && state[dataType][id];

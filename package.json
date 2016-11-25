@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "express": "^4.14.0",
-    "node-uuid": "^1.4.7",
     "normalizr": "^2.2.1",
     "pug": "^2.0.0-beta6",
     "pug-loader": "^2.3.0",
@@ -39,6 +38,7 @@
     "react-router": "next",
     "redux": "^3.6.0",
     "redux-logger": "^2.7.4",
-    "redux-thunk": "^2.1.0"
+    "redux-thunk": "^2.1.0",
+    "uuid": "^3.0.0"
   }
 }

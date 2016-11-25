@@ -1,20 +1,21 @@
 import { ADD_DATA, REMOVE_DATA } from './../constants/action-types';
 import { normalizeResponse } from './../utils/normalizr';
 
-export const addData = (dataType, ref, data, normalize = true) => ({
+export const addData = (dataType, data, normalize = true) => ({
   type: ADD_DATA,
   payload: {
     dataType,
-    ref,
     data: normalize ? normalizeResponse(dataType, data) : data
+  },
+  meta: {
+    toast: 'Added item'
   }
 });
 
-export const removeData = (dataType, ref, ids) => ({
+export const removeData = (dataType, ids) => ({
   type: REMOVE_DATA,
   payload: {
     dataType,
-    ref,
-    ids: ids
+    ids: Array.isArray(ids) ? ids : [ids]
   }
 });
