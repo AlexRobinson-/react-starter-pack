@@ -4,7 +4,7 @@ const toasts = (state = [], action) => {
   const { type, payload, meta } = action;
 
   if (type === CLEAR_TOAST) {
-    return state; //.filter(toast => toast.id !== payload.id);
+    return state.filter(toast => toast.id !== payload.id);
   }
 
   if (!meta || !meta.toast) {
