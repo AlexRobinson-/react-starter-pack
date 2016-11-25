@@ -7,6 +7,9 @@ import indexPage from './views/index.pug';
 let createStore = require('./../shared/create-store').default;
 let App = require('./../shared').default;
 
+/**
+ * For hot reloading server render
+ */
 if (module.hot) {
   module.hot.accept('./../shared', () => {
     App = require('./../shared').default;
