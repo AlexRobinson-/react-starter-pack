@@ -2,11 +2,11 @@ import { createStore, applyMiddleware } from 'redux';
 import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 import toastMiddleware from './modules/toast/middlewares/toast-middleware';
-import reducer from './reducers';
+import generateReducer from './reducers';
 
 export default () => {
   return createStore(
-    reducer,
+    generateReducer(),
     applyMiddleware(thunk, toastMiddleware, createLogger())
   )
 }
