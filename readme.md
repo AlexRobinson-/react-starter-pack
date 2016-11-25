@@ -10,7 +10,7 @@ yarn
 
 **Run in dev mode**
 ```
-npm run dev
+yarn dev
 ```
 
 **Restart server**
