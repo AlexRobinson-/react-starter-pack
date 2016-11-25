@@ -1,15 +1,19 @@
 import express from 'express';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
+import { Provider } from 'react-redux';
 import { ServerRouter, createServerRenderContext } from 'react-router';
 import indexPage from './views/index.pug';
+let createStore = require('./../shared/create-store').default;
 let App = require('./../shared').default;
 
 if (module.hot) {
-  console.log('has hot');
   module.hot.accept('./../shared', () => {
-    console.log('getting update');
     App = require('./../shared').default;
+  });
+
+  module.hot.accept('./../shared', () => {
+    createStore = require('./../shared/create-store').default;
   });
 } else {
   console.log('does not have hot');
@@ -30,7 +34,9 @@ app.get('*', (req, res) => {
       location={req.url}
       context={context}
     >
-      <App/>
+      <Provider store={createStore()}>
+        <App/>
+      </Provider>
     </ServerRouter>
   );
 

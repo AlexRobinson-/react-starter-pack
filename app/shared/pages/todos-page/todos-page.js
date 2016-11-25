@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { addData } from './../../actions/item-actions';
 
-const TodosPage = () => (
-  <div>This is the todos page</div>
-);
+class TodosPage extends Component {
 
-export default TodosPage;
+  componentWillMount () {
+    this.props.addData('TODO_TYPE', '123', {
+      id: '123',
+      title: 'This is a test'
+    });
+  }
+
+  render () {
+    return (
+      <div>This is the todos page</div>
+    );
+  }
+}
+
+export default connect(
+  state => ({}),
+  { addData }
+)(TodosPage);
