@@ -1,7 +1,5 @@
 import App from './pages/app';
-import { registerModule } from './modules';
-import toast from './modules/toast';
+import './modules';
 
-registerModule('toast', toast);
 
 export default App;

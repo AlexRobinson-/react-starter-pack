@@ -1,3 +1,5 @@
+import toast from './toast';
+
 const reducers = {};
 const selectors = {};
 const middleware = [];
@@ -33,3 +35,5 @@ export {
   selectors,
   middleware
 }
+
+registerModule('toast', toast);
