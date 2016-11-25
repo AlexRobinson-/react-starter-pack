@@ -22,12 +22,10 @@ export const registerModule = (name, module) => {
       (mod, funcName) => ({
         ...mod,
         [funcName]: (state, ...args) => {
-          console.log('calling selector', name, funcName, state);
           return module.selectors[funcName](state[name], ...args)
         }
       }), {}
     );
-  console.log('selectors', selectors);
 };
 
 export {

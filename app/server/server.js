@@ -15,11 +15,7 @@ if (module.hot) {
   module.hot.accept('./../shared', () => {
     createStore = require('./../shared/create-store').default;
   });
-} else {
-  console.log('does not have hot');
 }
-
-console.log('testing stuff');
 
 const app = express();
 

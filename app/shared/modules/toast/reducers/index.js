@@ -27,8 +27,5 @@ const toasts = (state = [], action) => {
 export default toasts;
 
 export const selectors = {
-  getToasts: state => {
-    console.log('getting toasts', state);
-    return [...state]
-  }
+  getToasts: state => [...state]
 };
