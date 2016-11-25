@@ -4,7 +4,7 @@ const toasts = (state = [], action) => {
   const { type, payload, meta } = action;
 
   if (type === CLEAR_TOAST) {
-    return state.filter(toast => toast.id !== payload.id);
+    return state; //.filter(toast => toast.id !== payload.id);
   }
 
   if (!meta || !meta.toast) {
@@ -26,4 +26,9 @@ const toasts = (state = [], action) => {
 
 export default toasts;
 
-export const getToasts = state => [...state];
+export const selectors = {
+  getToasts: state => {
+    console.log('getting toasts', state);
+    return [...state]
+  }
+};

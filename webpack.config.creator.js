@@ -43,6 +43,19 @@ export default (SERVER, PROD) => {
   };
   rules.push(js);
 
+  const sass = {
+    test: /\.scss/,
+    include: [
+      sharedPath
+    ],
+    loaders: [
+      `${SERVER ? 'fake-' : ''}style-loader`,
+      'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+      'sass-loader'
+    ]
+  };
+  rules.push(sass);
+
   const pug = {
     test: /\.pug/,
     include: serverPath,

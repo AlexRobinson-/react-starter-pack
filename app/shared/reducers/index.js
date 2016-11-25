@@ -1,19 +1,20 @@
 import { combineReducers } from 'redux';
+import { registerModule, reducers } from './../modules';
 import data, * as fromData from './data';
-import toast, * as fromToast from './../modules/toast/reducers';
+import toast from './../modules/toast';
+
+registerModule('toast', toast);
+
+console.log('reducers', reducers);
 
 const reducer = combineReducers({
-  data,
-  toast
+  ...reducers,
+  data
 });
 
 export default reducer;
 
 export const getAllItems = (state, ...args) => fromData.getAllItems(state.data, ...args);
 export const getItem = (state, ...args) => fromData.getItem(state.data, ...args);
+export { selectors } from './../modules';
 
-const toastSelectors = Object.keys(fromToast).map(selector => (state, ...args) => selector(state.toast, ...args));
-
-export {
-  toast
-}
