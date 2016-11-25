@@ -3,15 +3,20 @@ import { connect } from 'react-redux';
 import Toast from './../../components/toast';
 import styles from './toast-list.scss';
 import { selectors } from './../../../../reducers';
+import { clearToast } from './../../actions/toast-actions';
 
-const ToastList = ({ toasts }) => toasts ? (
+const ToastList = ({ toasts, clearToast }) => toasts ? (
   <div className={styles.ToastList}>
     {
       toasts.map(toast => (
-        <Toast
-          {...toast}
+        <div
+          onClick={() => clearToast(toast.id)}
           key={toast.id}
-        />
+        >
+          <Toast
+            {...toast}
+          />
+        </div>
       ))
     }
   </div>
@@ -20,5 +25,6 @@ const ToastList = ({ toasts }) => toasts ? (
 export default connect(
   state => ({
     toasts: selectors.toast.getToasts(state)
-  })
+  }),
+  { clearToast }
 )(ToastList);
