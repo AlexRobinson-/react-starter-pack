@@ -9,6 +9,8 @@ const sharedPath = path.resolve(appPath, 'shared');
 const baseOutputPath = path.resolve('build');
 
 export default (SERVER, PROD) => {
+  console.log('Creating webpack config', 'server:', SERVER, 'prod:', PROD);
+
   const CLIENT = !SERVER;
   const DEV = !PROD;
 
