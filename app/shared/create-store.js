@@ -4,9 +4,23 @@ import thunk from 'redux-thunk';
 import generateReducer from './reducers';
 import { middleware } from './modules';
 
-export default () => {
+export default (initialState, universalPromise) => {
+  const middlewares = [
+    thunk,
+    ...middleware
+  ];
+
+  if (typeof process !== 'undefined' && !process.env) {
+    middlewares.push(createLogger());
+  }
+
+  if (universalPromise) {
+    middlewares.unshift(universalPromise);
+  }
+
   return createStore(
     generateReducer(),
-    applyMiddleware(thunk, ...middleware, createLogger())
+    initialState,
+    applyMiddleware(...middlewares)
   )
 }

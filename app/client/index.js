@@ -5,12 +5,14 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import createStore from './../shared/create-store';
 
+const initialState = window.__INITIAL_STATE__ || {};
+
 const renderApp = () => {
   const NextApp = require('./../shared').default;
   render(
     <AppContainer errorReporter={x => console.log(x)}>
       <BrowserRouter>
-        <Provider store={createStore()}>
+        <Provider store={createStore(initialState)}>
           <NextApp/>
         </Provider>
       </BrowserRouter>

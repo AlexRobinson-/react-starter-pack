@@ -4,6 +4,7 @@ import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { ServerRouter, createServerRenderContext } from 'react-router';
 import indexPage from './views/index.pug';
+import { UniversalPromiseCollector } from './../shared/modules/fetch/middlewares/universal-promise-middleware';
 let createStore = require('./../shared/create-store').default;
 let App = require('./../shared').default;
 
@@ -24,20 +25,26 @@ const app = express();
 
 app.use('/assets', express.static('build/assets'));
 
-app.get('*', (req, res) => {
+app.get('*', async (req, res) => {
 
   const context = createServerRenderContext();
 
-  let initialHtml = renderToString(
+  const universalPromise = new UniversalPromiseCollector();
+
+  const store = createStore(undefined, universalPromise.middleware());
+
+  const render = () => renderToString(
     <ServerRouter
       location={req.url}
       context={context}
     >
-      <Provider store={createStore()}>
+      <Provider store={store}>
         <App/>
       </Provider>
     </ServerRouter>
   );
+
+  let initialHtml = render();
 
   // get the result
   const result = context.getResult();
@@ -68,8 +75,11 @@ app.get('*', (req, res) => {
     }
   }
 
+  const s = await universalPromise.awaitPromises();
+
   res.send(indexPage({
-    initialHtml
+    initialHtml: render(),
+    initialState: store.getState()
   }));
 });
 

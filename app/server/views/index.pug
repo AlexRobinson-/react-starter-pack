@@ -3,4 +3,10 @@ html
         title Starter Pack
     body
         #entry !{initialHtml}
+        script.
+            window.__INITIAL_STATE__ = !{JSON.stringify(initialState)}
+
         script(src="/assets/bundle.client.js")
+
+
+
