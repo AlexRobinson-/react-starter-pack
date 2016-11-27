@@ -4,28 +4,7 @@ import {
   FETCH_RECEIVE,
   FETCH_FAILURE
 } from './../constants/action-types';
-import { TODO_TYPE } from './../constants/data-types';
 import { normalizeResponse } from './../utils/normalizr';
-import {
-  FETCH_FAILURE,
-  FETCH_REQUEST,
-  FETCH_SUCCESS
-} from './../constants/fetch-status-types';
-
-const data = {
-  [TODO_TYPE]: {}
-};
-
-const _createTodo = title => {
-  const id = v4();
-  data[TODO_TYPE][id] = {
-    title,
-    id
-  }
-};
-
-_createTodo('Do stuff');
-_createTodo('Do more stuff');
 
 export const fetchRequest = (dataType, ref) => ({
   type: FETCH_REQUEST,
@@ -40,7 +19,10 @@ export const fetchReceive = (dataType, ref, response, normalize = true) => ({
   payload: {
     dataType,
     ref,
-    response
+    data: normalize ? normalizeResponse(dataType, response) : response
+  },
+  meta: {
+    containsNormalizedData: true
   }
 });
 
@@ -53,19 +35,21 @@ export const fetchFailure = (dataType, ref, errorMessage) => ({
   }
 });
 
-export const fetchAction = (dataType, ref, promise) => async (dispatch, getState) => {
+export const fetchAction = (dataType, ref, promise) => (dispatch, getState) => {
   // Check cache
+  (async () => {
+    dispatch(fetchRequest(dataType, ref));
 
-  dispatch(fetchRequest(dataType, ref));
+    try {
+      const response = await Promise.resolve(promise);
 
-  try {
-    const response = await promise();
+      dispatch(fetchReceive(dataType, ref, response));
 
-    dispatch(fetchReceive(dataType, ref, response));
+    } catch (err) {
+      console.log(err);
+    }
+  })();
 
-  } catch (err) {
-    dispatch(fetch)
-  }
 };
 
 export const fetchItems = (dataType, query = '') => (dispatch, getState) => {

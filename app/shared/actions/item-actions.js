@@ -8,7 +8,8 @@ export const addData = (dataType, data, normalize = true) => ({
     data: normalize ? normalizeResponse(dataType, data) : data
   },
   meta: {
-    toast: 'Added item'
+    toast: 'Added item',
+    containsNormalizedData: true
   }
 });
 

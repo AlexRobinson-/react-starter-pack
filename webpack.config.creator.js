@@ -18,7 +18,10 @@ export default (SERVER, PROD) => {
   const serverEntry = [path.resolve(serverPath, 'index.js')];
   const clientEntry = [path.resolve(clientPath, 'index.js')];
 
-  const entry = SERVER ? serverEntry : clientEntry;
+  const entry = [
+    'babel-polyfill',
+    ...(SERVER ? serverEntry : clientEntry)
+  ];
 
   /* Output */
   const serverOutput = {

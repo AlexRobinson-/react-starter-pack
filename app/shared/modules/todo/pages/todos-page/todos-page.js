@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addData } from './../../../../actions/item-actions';
 import TodoList from './../../containers/todo-list';
 import AddTodo from './../../containers/add-todo';
+import { fetchTodos } from './../../actions/todo-actions';
 
 class TodosPage extends Component {
 
   componentWillMount () {
-    this.props.addData('TODO_TYPE', {
-      id: '123',
-      title: 'This is a test'
-    });
+    this.props.fetchTodos();
   }
 
   render () {
@@ -26,5 +23,5 @@ class TodosPage extends Component {
 
 export default connect(
   state => ({}),
-  { addData }
+  { fetchTodos }
 )(TodosPage);
