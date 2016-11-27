@@ -36,37 +36,6 @@ export const fetchFailure = (dataType, ref, errorMessage) => ({
   }
 });
 
-export const fA = universalPromise(
-  (req, res) =>
-    (dataType, ref, promise) => async (dispatch, getState) => {
-      dispatch(fetchRequest(dataType, ref));
-
-      try {
-        const response = await
-          Promise.resolve(promise);
-
-        dispatch(fetchReceive(dataType, ref, response));
-        res();
-
-      } catch (err) {
-        console.log(err);
-        rej(err);
-      }
-    },
-  {
-    type: 'FETCH_FAILURE'
-  }
-);
-
-const f = (dataType, ref) => universalPromise(
-  (res, rej) => {
-
-  },
-  () => ({
-    type: 'FETCH_FAILURE'
-  })
-);
-
 export const fetchAction = (dataType, ref, promise) => (dispatch, getState) => universalPromise(
   (res, rej) => {
     dispatch(fetchRequest(dataType, ref));
