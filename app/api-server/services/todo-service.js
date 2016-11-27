@@ -50,3 +50,8 @@ export const deleteTodo = id => {
   delete db[id];
   return todo;
 };
+
+
+/* Mock data */
+createTodo({title: 'Do something'});
+createTodo({title: 'Do some stuff'});
