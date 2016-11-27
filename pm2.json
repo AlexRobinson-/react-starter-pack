@@ -3,8 +3,27 @@
     {
       "name": "react-starter-pack",
       "script": "build/bundle.server.js",
-      "watch": ["./app/server/*"],
-      "ignore_watch" : ["node_modules", "app/client", "app/shared"]
+      "watch": [
+        "./app/server/*"
+      ],
+      "ignore_watch": [
+        "node_modules",
+        "app/client",
+        "app/shared"
+      ]
+    },
+    {
+      "name": "react-starter-pack-api",
+      "script": "app/api-server/index.js",
+      "watch": [
+        "./app/api-server/*"
+      ],
+      "ignore_watch": [
+        "node_modules",
+        "app/client",
+        "app/shared",
+        "app/server"
+      ]
     }
   ]
 }
