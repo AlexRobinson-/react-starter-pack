@@ -20,7 +20,7 @@ export const createTodo = async (data = {}) => {
 };
 
 export const getTodos = async () => Object.keys(db).map(id => db[id]);
-export const getTodo = async () => {
+export const getTodo = async id => {
   if (!db[id]) {
     throw new Error(`Todo with id ${id} does not exist`);
   }

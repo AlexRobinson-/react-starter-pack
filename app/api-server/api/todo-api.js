@@ -5,6 +5,7 @@ import {
   createTodo,
   deleteTodo
 } from './../services/todo-service';
+import ar from './../utils/async-route';
 
 const router = new Router();
 
@@ -20,10 +21,10 @@ router.get('/', async (req, res) => {
 /**
  * Get todo
  */
-router.get('/:id', async (req, res) => {
+router.get('/:id', ar(async (req, res) => {
   const todo = await getTodo(req.params.id);
-  return res.send(todo);
-});
+  res.send(todo);
+}));
 
 /**
  * Create todo
