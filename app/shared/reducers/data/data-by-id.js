@@ -1,8 +1,9 @@
 import {
   REMOVE_DATA
 } from './../../constants/action-types';
+import { ByIdState } from './../../utils/flow-types';
 
-const withData = (state, payload, meta) => {
+const withData = (state: ByIdState, payload, meta) => {
   if (!meta || !meta.containsNormalizedData || !payload.data) {
     return state;
   }

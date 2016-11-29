@@ -2,8 +2,9 @@ import {
   ADD_DATA,
   REMOVE_DATA
 } from './../../constants/action-types';
+import { IdsState } from './../../utils/flow-types';
 
-const withData = (state, payload, meta) => {
+const withData = (state: IdsState, payload, meta) => {
   if (!meta || !meta.containsNormalizedData || !payload.data) {
     return state;
   }
