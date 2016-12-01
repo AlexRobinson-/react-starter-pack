@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { v4 } from 'uuid';
-import { TODO_TYPE } from './../../../../constants/data-types';
-import { addData } from './../../../../actions/item-actions';
+import { createTodo } from './../../actions/todo-actions';
 import TodoForm from './../../components/todo-form';
 
 class AddTodo extends Component {
@@ -15,19 +14,15 @@ class AddTodo extends Component {
   }
 
   createTodo(todo) {
-    this.props.addData(
-      TODO_TYPE,
-      {
-        ...todo,
-        id: v4()
-      }
+    this.props.createTodo(
+      todo,
     );
   }
 
   render() {
     return (
       <div>
-        Add Todo
+        <h2>Add Todo</h2>
         <TodoForm
           todo={{}}
           onSubmit={todo => this.createTodo(todo)}
@@ -40,6 +35,6 @@ class AddTodo extends Component {
 
 export default connect(
   undefined,
-  { addData }
+  { createTodo }
 )(AddTodo);
 
