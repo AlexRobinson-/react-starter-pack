@@ -15,17 +15,29 @@ export const fetchRequest = (dataType, ref) => ({
   }
 });
 
-export const fetchReceive = (dataType, ref, response, normalize = true) => ({
+export const fetchReceive = (dataType, ref, response) => ({
   type: FETCH_RECEIVE,
   payload: {
     dataType,
     ref,
-    data: normalize ? normalizeResponse(dataType, response) : response
+    data: normalizeResponse(dataType, response)
   },
   meta: {
     containsNormalizedData: true
   }
 });
+
+export const fetchCreateRequest = (dataType, id, data, normalize = true) => {
+  const action = fetchRequest(dataType, id);
+  return {
+    ...action,
+    payload: {
+      ...action.payload,
+      tempId: id,
+      data: normalize ? normalizeResponse(dataType, data || []) : data
+    }
+  }
+};
 
 export const fetchFailure = (dataType, ref, errorMessage) => ({
   type: FETCH_FAILURE,
@@ -35,6 +47,13 @@ export const fetchFailure = (dataType, ref, errorMessage) => ({
     errorMessage
   }
 });
+
+export const fetchCreate = (dataType, ref, promise, normalize = true) => (dispatch) => {
+  const tempId = v4();
+
+  dispatch(fetchCreateRequest(dataType, ref));
+
+};
 
 export const fetchAction = (dataType, ref, promise) => (dispatch, getState) => universalPromise(
   (res, rej) => {

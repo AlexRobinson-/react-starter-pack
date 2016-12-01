@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import data, * as fromData from './data';
-import { reducers } from './../modules';
+import { reducer as toast } from './../modules/toast';
 
 export default () => combineReducers({
   ...reducers,

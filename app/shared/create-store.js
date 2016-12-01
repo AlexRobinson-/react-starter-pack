@@ -21,6 +21,8 @@ export default (initialState, universalPromise) => {
   return createStore(
     generateReducer(),
     initialState,
-    applyMiddleware(...middlewares)
+    typeof process !== 'undefined' && !process.env
+      ? applyMiddleware(...middlewares)
+      : applyMiddleware(...middlewares, createLogger())
   )
 }

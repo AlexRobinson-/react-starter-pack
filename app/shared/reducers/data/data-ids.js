@@ -1,5 +1,4 @@
 import {
-  ADD_DATA,
   REMOVE_DATA
 } from './../../constants/action-types';
 import { IdsState } from './../../utils/flow-types';

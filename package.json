@@ -6,6 +6,7 @@
   "scripts": {
     "test": "mocha \"app/**/*.test.js\" --opts test/mocha.opts",
     "test:watch": "npm run test -- --watch",
+    "restart": "npm run restart:server && npm run restart:api",
     "restart:server": "pm2 restart react-starter-pack",
     "restart:api": "pm2 restart react-starter-pack-api",
     "dev": "babel-node dev-server.js"
