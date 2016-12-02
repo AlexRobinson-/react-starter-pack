@@ -9,6 +9,18 @@ import { normalizeResponse } from './../../../utils/normalizr';
 import { withData } from './../../data/utils/action-creators';
 import universalPromise from './../middlewares/universal-promise-middleware';
 
+/*****
+ * Helpers
+ */
+
+
+const actionMiddleware = (state, action, next) => {
+  if (!next) {
+    return action;
+  }
+  return next(action, state);
+};
+
 
 /*****
  * Get items
@@ -128,14 +140,20 @@ export const fetchDeleteReceive = (dataType, id) => withData({
   { dataType, id }
 );
 
-export const fetchDeleteAction = (dataType, id, promise) => async(dispatch, getState) => {
+export const fetchDeleteAction = (dataType, id, promise, config = {}) => async(dispatch, getState) => {
 
   dispatch(fetchDeleteRequest(dataType, id));
 
   try {
     await promise;
 
-    dispatch(fetchDeleteReceive(dataType, id));
+    dispatch(
+      actionMiddleware(
+        { dispatch, getState },
+        fetchDeleteReceive(dataType, id),
+        config.onSuccess
+      )
+    );
   } catch (err) {
     console.log(err);
   }
