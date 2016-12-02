@@ -43,3 +43,4 @@ export {
 
 registerModule('toast', toast);
 registerModule('data', data);
+registerModule('fetch', require('./fetch'));
