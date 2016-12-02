@@ -1,4 +1,4 @@
-export const withData = (action, add, remove) => ({
+export const withData = (add, remove) => action => ({
   ...action,
   meta: {
     ...(action.meta || {}),

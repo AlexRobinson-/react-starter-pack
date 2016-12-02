@@ -11,7 +11,11 @@ import { getTodo } from './../selectors';
 
 export const fetchTodos = () => fetchAction(TODO_TYPE, 'all', todoApi.getTodos());
 
-export const createTodo = todo => fetchCreateAction(TODO_TYPE, todo, todoApi.createTodo(todo));
+export const createTodo = todo => fetchCreateAction(TODO_TYPE, todo, todoApi.createTodo(todo),
+  {
+    onSuccess: withToast('Created Todo')
+  }
+);
 
 export const deleteTodo = id => fetchDeleteAction(
   TODO_TYPE, id, todoApi.deleteTodo(id),

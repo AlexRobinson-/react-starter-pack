@@ -35,7 +35,8 @@ export const fetchRequest = (dataType, ref) => ({
   }
 });
 
-export const fetchReceive = (dataType, ref, response) => withData(
+export const fetchReceive = (dataType, ref, response) => actionCompose(
+  undefined,
   {
     type: FETCH_RECEIVE,
     payload: {
@@ -43,7 +44,7 @@ export const fetchReceive = (dataType, ref, response) => withData(
       ref
     }
   },
-  normalizeResponse(dataType, response)
+  withData(normalizeResponse(dataType, response))
 );
 
 export const fetchAction = (dataType, ref, promise) => (dispatch, getState) => universalPromise(
@@ -72,34 +73,37 @@ export const fetchAction = (dataType, ref, promise) => (dispatch, getState) => u
  * Create items
  */
 
-export const fetchCreateRequest = (dataType, data, tempId) => withData({
+export const fetchCreateRequest = (dataType, data, tempId) => actionCompose(
+  undefined,
+  {
     type: FETCH_CREATE_REQUEST,
     payload: {
       dataType,
       tempId
     }
   },
-  normalizeResponse(dataType, data)
+  withData(normalizeResponse(dataType, data))
 );
 
-export const fetchCreateReceive = (dataType, response, tempId) => withData({
+export const fetchCreateReceive = (dataType, response, tempId) => actionCompose(
+  undefined,
+  {
     type: FETCH_CREATE_RECEIVE,
     payload: {
       dataType
     },
-    meta: {
-      toast: 'Created item'
-    }
   },
-  normalizeResponse(dataType, response),
-  {
-    dataType,
-    id: tempId
-  }
+  withData(
+    normalizeResponse(dataType, response),
+    {
+      dataType,
+      id: tempId
+    }
+  )
 );
 
-export const fetchCreateAction = (dataType, data, promise, optimistic = true) => async(dispatch, getState) => {
-  const tempId = optimistic ? v4() : undefined;
+export const fetchCreateAction = (dataType, data, promise, config = {}) => async(dispatch, getState) => {
+  const tempId = config.optimistic !== false ? v4() : undefined;
 
   dispatch(fetchCreateRequest(dataType,
     {
@@ -111,7 +115,13 @@ export const fetchCreateAction = (dataType, data, promise, optimistic = true) =>
 
   try {
     const response = await promise;
-    dispatch(fetchCreateReceive(dataType, response, tempId));
+    dispatch(
+      actionCompose(
+        { dispatch, getState },
+        fetchCreateReceive(dataType, response, tempId),
+        config.onSuccess
+      )
+    );
   } catch (err) {
     console.log(err);
   }
@@ -130,15 +140,19 @@ export const fetchDeleteRequest = (dataType, id) => ({
   }
 });
 
-export const fetchDeleteReceive = (dataType, id) => withData({
+export const fetchDeleteReceive = (dataType, id) => actionCompose(
+  undefined,
+  {
     type: 'FETCH_DELETE_RECEIVE',
     payload: {
       dataType,
       id
     }
   },
-  undefined,
-  { dataType, id }
+  withData(
+    undefined,
+    { dataType, id }
+  )
 );
 
 export const fetchDeleteAction = (dataType, id, promise, config = {}) => async(dispatch, getState) => {
@@ -155,11 +169,7 @@ export const fetchDeleteAction = (dataType, id, promise, config = {}) => async(d
         config.onSuccess
       )
     );
-    // actionMiddleware(
-    //   { dispatch, getState },
-    //   ,
-    //   config.onSuccess
-    // )
+
   } catch (err) {
     console.log(err);
   }
