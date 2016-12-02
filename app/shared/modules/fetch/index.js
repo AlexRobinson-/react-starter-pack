@@ -1,1 +1,1 @@
-export * as actions from './actions/fetch-actions-revamp';
+export * as actions from './actions/fetch-actions';

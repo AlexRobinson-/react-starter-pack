@@ -22,6 +22,6 @@ class TodosPage extends Component {
 }
 
 export default connect(
-  state => ({}),
+  undefined,
   { fetchTodos }
 )(TodosPage);

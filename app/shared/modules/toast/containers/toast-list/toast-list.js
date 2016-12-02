@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Toast from './../../components/toast';
 import styles from './toast-list.scss';
-import { selectors } from './../../../../reducers';
+import { selectors } from './../../reducers';
 import { clearToast } from './../../actions/toast-actions';
 
 const ToastList = ({ toasts, clearToast }) => toasts ? (
@@ -24,7 +24,7 @@ const ToastList = ({ toasts, clearToast }) => toasts ? (
 
 export default connect(
   state => ({
-    toasts: selectors.toast.getToasts(state)
+    toasts: selectors.getToasts(state.toast)
   }),
   { clearToast }
 )(ToastList);

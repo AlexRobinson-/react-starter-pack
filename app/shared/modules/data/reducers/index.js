@@ -7,8 +7,9 @@ export default combineReducers({
   ids
 });
 
-export const selectors = {
-  getItem: (state, dataType, id) => fromById.getItem(state.byId, dataType, id),
-  getAllItems: (state, dataType) => fromIds.getIds(state.ids, dataType).map(id => getItem(state, dataType, id))
-};
+/* Selectors */
+
+export const getItem = (state, dataType, id) => fromById.getItem(state.byId, dataType, id);
+
+export const getAllItems = (state, dataType) => fromIds.getIds(state.ids, dataType).map(id => getItem(state, dataType, id));
 

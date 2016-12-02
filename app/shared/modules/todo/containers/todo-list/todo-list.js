@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { TODO_TYPE } from './../../../../constants/data-types';
-import { getAllItems } from './../../../../reducers';
+import { getAllTodos } from './../../selectors';
 import { deleteTodo } from './../../actions/todo-actions';
 import TodoItem from './../../components/todo-item';
 
@@ -29,7 +29,7 @@ const TodoList = ({ todos, deleteTodo }) => (
 
 export default connect(
   state => ({
-    todos: getAllItems(state, TODO_TYPE)
+    todos: getAllTodos(state, TODO_TYPE)
   }),
   { deleteTodo }
 )(TodoList)

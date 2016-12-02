@@ -2,10 +2,17 @@ import { v4 } from 'uuid';
 import {
   FETCH_REQUEST,
   FETCH_RECEIVE,
-  FETCH_FAILURE
-} from './../../../constants/action-types';
+  FETCH_CREATE_REQUEST,
+  FETCH_CREATE_RECEIVE
+} from './../constants/action-types';
 import { normalizeResponse } from './../../../utils/normalizr';
+import { withData } from './../../data/utils/action-creators';
 import universalPromise from './../middlewares/universal-promise-middleware';
+
+
+/*****
+ * Get items
+ */
 
 export const fetchRequest = (dataType, ref) => ({
   type: FETCH_REQUEST,
@@ -15,45 +22,16 @@ export const fetchRequest = (dataType, ref) => ({
   }
 });
 
-export const fetchReceive = (dataType, ref, response) => ({
-  type: FETCH_RECEIVE,
-  payload: {
-    dataType,
-    ref,
-    data: normalizeResponse(dataType, response)
-  },
-  meta: {
-    containsNormalizedData: true
-  }
-});
-
-export const fetchCreateRequest = (dataType, id, data, normalize = true) => {
-  const action = fetchRequest(dataType, id);
-  return {
-    ...action,
+export const fetchReceive = (dataType, ref, response) => withData(
+  {
+    type: FETCH_RECEIVE,
     payload: {
-      ...action.payload,
-      tempId: id,
-      data: normalize ? normalizeResponse(dataType, data || []) : data
+      dataType,
+      ref
     }
-  }
-};
-
-export const fetchFailure = (dataType, ref, errorMessage) => ({
-  type: FETCH_FAILURE,
-  payload: {
-    dataType,
-    ref,
-    errorMessage
-  }
-});
-
-export const fetchCreate = (dataType, ref, promise, normalize = true) => (dispatch) => {
-  const tempId = v4();
-
-  dispatch(fetchCreateRequest(dataType, ref));
-
-};
+  },
+  normalizeResponse(dataType, response)
+);
 
 export const fetchAction = (dataType, ref, promise) => (dispatch, getState) => universalPromise(
   (res, rej) => {
@@ -66,8 +44,6 @@ export const fetchAction = (dataType, ref, promise) => (dispatch, getState) => u
           dispatch(fetchReceive(dataType, ref, response));
           res();
         });
-
-
     } catch (err) {
       console.log(err);
       rej(err);
@@ -78,28 +54,54 @@ export const fetchAction = (dataType, ref, promise) => (dispatch, getState) => u
   })
 );
 
-export const fetchItems = (dataType, query = '') => universalPromise(
-  (req, res) => (dispatch, getState) => {
 
-    // Check cache
-    dispatch({
-      type: FETCH_GET_ITEMS,
-      payload: {
-        status: FETCH_REQUEST,
-        query
-      }
-    });
+/**
+ * Create items
+ */
 
-    // Fetch data
-    const response = Object.keys(data[dataType]).map(id => data[dataType][id]); // ignore query for now
+export const fetchCreateRequest = (dataType, data, tempId) => withData({
+    type: FETCH_CREATE_REQUEST,
+    payload: {
+      dataType,
+      tempId
+    }
+  },
+  normalizeResponse(dataType, data)
+);
 
-    // dispatch
-    dispatch({
-      type: FETCH_GET_ITEMS,
-      payload: {
-        status: FETCH_SUCCESS,
-        response: normalizeResponse(response)
-      }
-    });
+export const fetchCreateReceive = (dataType, response, tempId) => withData({
+    type: FETCH_CREATE_RECEIVE,
+    payload: {
+      dataType
+    },
+    meta: {
+      toast: 'Created item'
+    }
+  },
+  normalizeResponse(dataType, response),
+  {
+    dataType,
+    id: tempId
   }
 );
+
+export const fetchCreateAction = (dataType, data, promise, optimistic = true) => async(dispatch, getState) => {
+  const tempId = optimistic ? v4() : undefined;
+
+  dispatch(fetchCreateRequest(dataType,
+    {
+      ...data,
+      id: tempId
+    },
+    tempId
+  ));
+
+  try {
+    const response = await promise;
+    console.log('received response', response);
+
+    dispatch(fetchCreateReceive(dataType, response, tempId));
+  } catch (err) {
+    console.log(err);
+  }
+};

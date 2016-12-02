@@ -1,4 +1,4 @@
-import { IdsState } from './../../utils/flow-types';
+import { IdsState } from './../../../utils/flow-types';
 
 const addData = (state: IdsState, data) => {
   if (!data) {
@@ -28,7 +28,7 @@ const removeData = (state: IdsState, remove) => {
   const ids = Array.isArray(remove) ? remove : [remove];
 
   ids.forEach(({ dataType, id }) => {
-    newState[dataType] = new Set(...(state[payload.dataType] || []));
+    newState[dataType] = new Set(...(state[dataType] || []));
     newState[dataType].delete(id);
   });
 
@@ -38,7 +38,7 @@ const removeData = (state: IdsState, remove) => {
 const ids = (state = {}, action) => {
   const { meta, } = action;
 
-  if (!meta.dataModule) {
+  if (!meta || !meta.dataModule) {
     return state;
   }
 

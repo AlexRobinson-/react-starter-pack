@@ -1,7 +1,4 @@
-import {
-  REMOVE_DATA
-} from './../../constants/action-types';
-import { ByIdState } from './../../utils/flow-types';
+import { ByIdState } from './../../../utils/flow-types';
 
 const addData = (state: ByIdState, data) => {
   if (!data) {
@@ -43,7 +40,7 @@ const removeData = (state: ByIdState, remove) => {
 const byId = (state = {}, action) => {
   const { meta } = action;
 
-  if (!meta.dataModule) {
+  if (!meta || !meta.dataModule) {
     return state;
   }
 

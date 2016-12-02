@@ -1,5 +1,12 @@
-import reducer from './reducers';
+import reducer, * as selectors from './reducers';
 
 export default {
-  reducer
+  reducer,
+  selectors
 };
+
+
+export {
+  reducer,
+  selectors
+}
