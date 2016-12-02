@@ -1,4 +1,6 @@
 # Alex's Starter Pack
+## About
+The primary purpose of this starter pack is for me to play and experiment with different ideas, technologies and techniques. 
 
 ## Getting Started
 *This all assumes you have yarn installed*
