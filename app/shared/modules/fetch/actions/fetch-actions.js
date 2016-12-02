@@ -8,18 +8,19 @@ import {
 import { normalizeResponse } from './../../../utils/normalizr';
 import { withData } from './../../data/utils/action-creators';
 import universalPromise from './../middlewares/universal-promise-middleware';
+import actionCompose from './../../../utils/action-compose';
 
 /*****
  * Helpers
  */
 
 
-const actionMiddleware = (state, action, next) => {
-  if (!next) {
-    return action;
-  }
-  return next(action, state);
-};
+// const actionMiddleware = (state, action, next) => {
+//   if (!next) {
+//     return action;
+//   }
+//   return next(action, state);
+// };
 
 
 /*****
@@ -148,12 +149,17 @@ export const fetchDeleteAction = (dataType, id, promise, config = {}) => async(d
     await promise;
 
     dispatch(
-      actionMiddleware(
+      actionCompose(
         { dispatch, getState },
         fetchDeleteReceive(dataType, id),
         config.onSuccess
       )
     );
+    // actionMiddleware(
+    //   { dispatch, getState },
+    //   ,
+    //   config.onSuccess
+    // )
   } catch (err) {
     console.log(err);
   }
