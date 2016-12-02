@@ -27,7 +27,10 @@ const removeData = (state: ByIdState, remove) => {
 
   const ids = Array.isArray(remove) ? remove : [remove];
 
-  ids.forEach(({ dataType, id }) => {
+  ids.forEach(item => {
+
+    const { id, dataType } = item;
+
     if (!newState[dataType]) {
       return;
     }

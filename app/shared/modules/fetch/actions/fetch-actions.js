@@ -98,9 +98,44 @@ export const fetchCreateAction = (dataType, data, promise, optimistic = true) =>
 
   try {
     const response = await promise;
-    console.log('received response', response);
-
     dispatch(fetchCreateReceive(dataType, response, tempId));
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/**
+ * Delete Item
+ */
+
+export const fetchDeleteRequest = (dataType, id) => ({
+  type: 'FETCH_DELETE_REQUEST',
+  payload: {
+    dataType,
+    id
+  }
+});
+
+export const fetchDeleteReceive = (dataType, id) => withData({
+    type: 'FETCH_DELETE_RECEIVE',
+    payload: {
+      dataType,
+      id
+    }
+  },
+  undefined,
+  { dataType, id }
+);
+
+export const fetchDeleteAction = (dataType, id, promise) => async(dispatch, getState) => {
+
+  dispatch(fetchDeleteRequest(dataType, id));
+
+  try {
+    await promise;
+
+    dispatch(fetchDeleteReceive(dataType, id));
   } catch (err) {
     console.log(err);
   }

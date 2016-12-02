@@ -16,6 +16,7 @@ const addData = (state: IdsState, data) => {
   );
 };
 
+
 const removeData = (state: IdsState, remove) => {
   if (!remove) {
     return state;
@@ -27,7 +28,9 @@ const removeData = (state: IdsState, remove) => {
 
   const ids = Array.isArray(remove) ? remove : [remove];
 
-  ids.forEach(({ dataType, id }) => {
+
+  ids.forEach(item => {
+    const { id, dataType } = item;
     newState[dataType] = new Set(...(state[dataType] || []));
     newState[dataType].delete(id);
   });
