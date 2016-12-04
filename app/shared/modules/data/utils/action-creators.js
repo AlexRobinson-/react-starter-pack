@@ -1,10 +1,11 @@
-export const withData = (add, remove) => action => ({
+export const withData = (add, remove, replace) => action => ({
   ...action,
   meta: {
     ...(action.meta || {}),
     dataModule: {
       add,
-      remove
+      remove,
+      replace
     }
   }
 });

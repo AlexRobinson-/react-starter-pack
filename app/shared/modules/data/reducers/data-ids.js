@@ -16,7 +16,6 @@ const addData = (state: IdsState, data) => {
   );
 };
 
-
 const removeData = (state: IdsState, remove) => {
   if (!remove) {
     return state;
@@ -36,6 +35,34 @@ const removeData = (state: IdsState, remove) => {
   return newState;
 };
 
+const replaceData = (state: IdsState, replace) => {
+  if (!replace) {
+    return state;
+  }
+
+  const newState = {
+    ...state
+  };
+
+  Object.keys(replace).forEach(dataType => {
+    const replaceConfig = Array.isArray(replace[dataType]) ? replace[dataType] : [replace[dataType]];
+    const newDataTypeState = Array.from(newState[dataType] || []);
+
+    replaceConfig.forEach(config => {
+      const index = newDataTypeState.indexOf(config.replaceId);
+      if (index > -1) {
+        newDataTypeState[index] = config.newId;
+      } else {
+        newDataTypeState.push(config.newId);
+      }
+    });
+
+    newState[dataType] = new Set(newDataTypeState);
+  });
+
+  return newState;
+};
+
 const ids = (state = {}, action) => {
   const { meta, } = action;
 
@@ -43,12 +70,16 @@ const ids = (state = {}, action) => {
     return state;
   }
 
-  return removeData(
-    addData(
-      state, meta.dataModule.add
+  return replaceData(
+    removeData(
+      addData(
+        state, meta.dataModule.add
+      ),
+      meta.dataModule.remove
     ),
-    meta.dataModule.remove
+    meta.dataModule.replace
   );
+
 };
 
 export default ids;

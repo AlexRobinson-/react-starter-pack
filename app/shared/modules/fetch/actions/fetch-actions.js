@@ -58,7 +58,7 @@ export const fetchAction = (dataType, ref, promise) => (dispatch, getState) => u
           res();
         });
     } catch (err) {
-      console.log(err);
+      console.error(err);
       rej(err);
     }
   },
@@ -95,9 +95,12 @@ export const fetchCreateReceive = (dataType, response, tempId) => actionCompose(
   },
   withData(
     normalizeResponse(dataType, response),
+    undefined,
     {
-      dataType,
-      id: tempId
+      [dataType]: {
+        replaceId: tempId,
+        newId: response.id
+      }
     }
   )
 );
@@ -123,7 +126,7 @@ export const fetchCreateAction = (dataType, data, promise, config = {}) => async
       )
     );
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 
@@ -171,6 +174,6 @@ export const fetchDeleteAction = (dataType, id, promise, config = {}) => async(d
     );
 
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
