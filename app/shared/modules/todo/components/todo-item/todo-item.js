@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TodoItem = ({ title, completed = false, onCompleteChange }) => (
+const TodoItem = ({ id, title, completed = false, onCompleteChange }) => (
   <div>
     <input
       type="checkbox"

@@ -1,5 +1,6 @@
 import toast from './toast';
 import data from './data';
+import fetch from './fetch';
 
 const reducers = {};
 const selectors = {};
@@ -43,4 +44,4 @@ export {
 
 registerModule('toast', toast);
 registerModule('data', data);
-registerModule('fetch', require('./fetch'));
+registerModule('fetch', fetch);

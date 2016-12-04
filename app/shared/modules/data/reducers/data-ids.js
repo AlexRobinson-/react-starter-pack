@@ -28,10 +28,8 @@ const removeData = (state: IdsState, remove) => {
 
   const ids = Array.isArray(remove) ? remove : [remove];
 
-
-  ids.forEach(item => {
-    const { id, dataType } = item;
-    newState[dataType] = new Set(...(state[dataType] || []));
+  ids.forEach(({ id, dataType }) => {
+    newState[dataType] = new Set(...(newState[dataType] || []));
     newState[dataType].delete(id);
   });
 
@@ -48,7 +46,8 @@ const ids = (state = {}, action) => {
   return removeData(
     addData(
       state, meta.dataModule.add
-    ), meta.dataModule.remove
+    ),
+    meta.dataModule.remove
   );
 };
 
