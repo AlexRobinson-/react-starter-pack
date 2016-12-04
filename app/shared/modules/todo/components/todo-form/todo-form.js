@@ -23,6 +23,11 @@ class TodoForm extends Component {
     }
 
     this.props.onSubmit({ ...this.state.todo });
+    this.setState({
+      todo: {
+        title: ''
+      }
+    });
   }
 
   updateTodo(update) {
