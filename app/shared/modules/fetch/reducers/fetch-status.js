@@ -1,8 +1,10 @@
 import { FETCH_REQUEST, FETCH_RECEIVE } from './../constants/action-types';
+import {
+  ERROR, LOADED, NOT_LOADED, PENDING
+} from './../constants/fetch-status';
 
 
 const cache = (state = {}, action) => {
-
   const { payload } = action;
 
   switch (action.type) {
@@ -11,7 +13,7 @@ const cache = (state = {}, action) => {
         ...state,
         [payload.dataType]: {
           ...(state[payload.dataType] || {}),
-          [payload.ref]: 'PENDING'
+          [payload.ref]: PENDING
         }
       };
     case FETCH_RECEIVE:
@@ -19,7 +21,7 @@ const cache = (state = {}, action) => {
         ...state,
         [payload.dataType]: {
           ...(state[payload.dataType] || {}),
-          [payload.ref]: 'LOADED'
+          [payload.ref]: LOADED
         }
       };
     default:
@@ -28,3 +30,11 @@ const cache = (state = {}, action) => {
 };
 
 export default cache;
+
+export const getFetchStatus = (state, dataType, ref) => {
+  if (!state[dataType] || !state[dataType][ref]) {
+    return NOT_LOADED;
+  }
+
+  return state[dataType][ref];
+};

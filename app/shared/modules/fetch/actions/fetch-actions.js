@@ -9,19 +9,8 @@ import { normalizeResponse } from './../../../utils/normalizr';
 import { withData } from './../../data/utils/action-creators';
 import universalPromise from './../middlewares/universal-promise-middleware';
 import actionCompose from './../../../utils/action-compose';
-
-/*****
- * Helpers
- */
-
-
-// const actionMiddleware = (state, action, next) => {
-//   if (!next) {
-//     return action;
-//   }
-//   return next(action, state);
-// };
-
+import { selectors } from './../../../modules';
+import { PENDING, LOADED } from './../constants/fetch-status';
 
 /*****
  * Get items
@@ -44,11 +33,19 @@ export const fetchReceive = (dataType, ref, response) => actionCompose(
       ref
     }
   },
-  withData(normalizeResponse(dataType, response))
+  withData(
+    normalizeResponse(dataType, response)
+  )
 );
 
 export const fetchAction = (dataType, ref, promise) => (dispatch, getState) => universalPromise(
   (res, rej) => {
+    const status = selectors.fetch.getFetchStatus(getState(), dataType, ref);
+
+    if (status === PENDING || status === LOADED) {
+      return;
+    }
+
     dispatch(fetchRequest(dataType, ref));
 
     try {
@@ -90,7 +87,8 @@ export const fetchCreateReceive = (dataType, response, tempId) => actionCompose(
   {
     type: FETCH_CREATE_RECEIVE,
     payload: {
-      dataType
+      dataType,
+      tempId
     },
   },
   withData(

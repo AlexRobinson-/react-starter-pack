@@ -1,2 +1,2 @@
 export * as actions from './actions/fetch-actions';
-export reducer from './reducers';
+export reducer, * as selectors from './reducers';

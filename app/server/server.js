@@ -25,7 +25,7 @@ const app = express();
 
 app.use('/assets', express.static('build/assets'));
 
-app.get('*', async (req, res) => {
+app.get('*', async(req, res) => {
 
   const context = createServerRenderContext();
 
@@ -39,7 +39,7 @@ app.get('*', async (req, res) => {
       context={context}
     >
       <Provider store={store}>
-        <App/>
+        <App />
       </Provider>
     </ServerRouter>
   );
@@ -69,7 +69,9 @@ app.get('*', async (req, res) => {
           location={req.url}
           context={context}
         >
-          <App/>
+          <Provider store={store}>
+            <App />
+          </Provider>
         </ServerRouter>
       );
     }

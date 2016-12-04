@@ -12,11 +12,11 @@ const router = new Router();
 /**
  * Get todos
  */
-router.get('/', async(req, res) => {
+router.get('/', ar(async(req, res) => {
   const todos = await getTodos();
 
   res.send(todos);
-});
+}));
 
 /**
  * Get todo
@@ -39,9 +39,9 @@ router.post('/', ar(async(req, res) => {
 /**
  * Delete todo
  */
-router.delete('/:id', async(req, res) => {
+router.delete('/:id', ar(async(req, res) => {
   await deleteTodo(req.params.id);
   res.sendStatus(204);
-});
+}));
 
 export default router;

@@ -7,6 +7,12 @@ import errorHandler from './utils/error-handler';
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+const delay = timeout => (req, res, next) => {
+  setTimeout(next, timeout);
+};
+
+app.use(delay(2000));
+
 app.use(cors());
 app.use(json());
 
