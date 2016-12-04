@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { TODO_TYPE } from './../../../../constants/data-types';
-import { getAllTodos } from './../../selectors';
+import { getAllTodos, getIsPending } from './../../selectors';
 import { deleteTodo } from './../../actions/todo-actions';
 import TodoItem from './../../components/todo-item';
 
-const TodoList = ({ todos, deleteTodo }) => (
+const TodoList = ({ todos, deleteTodo, isPending }) => (
   <ul>
     {
       todos.map(todo => (
@@ -15,11 +15,12 @@ const TodoList = ({ todos, deleteTodo }) => (
             onCompleteChange={completed => {}}
           />
           <button
+            disabled={isPending(todo.id)}
             onClick={() => {
                   deleteTodo(todo.id);
                 }}
           >
-            Delete
+            {isPending(todo.id) ? 'Pending...' : 'Delete'}
           </button>
         </li>
       ))
@@ -29,7 +30,8 @@ const TodoList = ({ todos, deleteTodo }) => (
 
 export default connect(
   state => ({
-    todos: getAllTodos(state, TODO_TYPE)
+    todos: getAllTodos(state, TODO_TYPE),
+    isPending: id => getIsPending(state, id)
   }),
   { deleteTodo }
 )(TodoList)

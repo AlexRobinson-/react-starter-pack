@@ -1,4 +1,11 @@
-import { FETCH_REQUEST, FETCH_RECEIVE } from './../constants/action-types';
+import {
+  FETCH_REQUEST,
+  FETCH_RECEIVE,
+  FETCH_CREATE_REQUEST,
+  FETCH_CREATE_RECEIVE,
+  FETCH_DELETE_REQUEST,
+  FETCH_DELETE_RECEIVE
+} from './../constants/action-types';
 import {
   ERROR, LOADED, NOT_LOADED, PENDING
 } from './../constants/fetch-status';
@@ -22,6 +29,38 @@ const cache = (state = {}, action) => {
         [payload.dataType]: {
           ...(state[payload.dataType] || {}),
           [payload.ref]: LOADED
+        }
+      };
+    case FETCH_CREATE_REQUEST:
+      return {
+        ...state,
+        [payload.dataType]: {
+          ...(state[payload.dataType] || {}),
+          [payload.tempId]: PENDING
+        }
+      };
+    case FETCH_CREATE_RECEIVE:
+      return {
+        ...state,
+        [payload.dataType]: {
+          ...(state[payload.dataType] || {}),
+          [payload.tempId]: LOADED
+        }
+      };
+    case FETCH_DELETE_REQUEST:
+      return {
+        ...state,
+        [payload.dataType]: {
+          ...(state[payload.dataType] || {}),
+          [payload.id]: PENDING
+        }
+      };
+    case FETCH_DELETE_RECEIVE:
+      return {
+        ...state,
+        [payload.dataType]: {
+          ...(state[payload.dataType] || {}),
+          [payload.id]: NOT_LOADED
         }
       };
     default:

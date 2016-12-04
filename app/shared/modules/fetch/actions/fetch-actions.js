@@ -3,7 +3,9 @@ import {
   FETCH_REQUEST,
   FETCH_RECEIVE,
   FETCH_CREATE_REQUEST,
-  FETCH_CREATE_RECEIVE
+  FETCH_CREATE_RECEIVE,
+  FETCH_DELETE_REQUEST,
+  FETCH_DELETE_RECEIVE
 } from './../constants/action-types';
 import { normalizeResponse } from './../../../utils/normalizr';
 import { withData } from './../../data/utils/action-creators';
@@ -61,7 +63,7 @@ export const fetchAction = (dataType, ref, promise) => (dispatch, getState) => u
     }
   },
   () => ({
-    type: 'FETCH_FAILURE'
+    type: FETCH_FAILURE
   })
 );
 
@@ -131,7 +133,7 @@ export const fetchCreateAction = (dataType, data, promise, config = {}) => async
  */
 
 export const fetchDeleteRequest = (dataType, id) => ({
-  type: 'FETCH_DELETE_REQUEST',
+  type: FETCH_DELETE_REQUEST,
   payload: {
     dataType,
     id
@@ -141,7 +143,7 @@ export const fetchDeleteRequest = (dataType, id) => ({
 export const fetchDeleteReceive = (dataType, id) => actionCompose(
   undefined,
   {
-    type: 'FETCH_DELETE_RECEIVE',
+    type: FETCH_DELETE_RECEIVE,
     payload: {
       dataType,
       id
