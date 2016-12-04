@@ -10,59 +10,30 @@ import {
   ERROR, LOADED, NOT_LOADED, PENDING
 } from './../constants/fetch-status';
 
+const setStatus = (state, dataType, ref, status) => ({
+  ...state,
+  [dataType]: {
+    ...(state[dataType] || {}),
+    [ref]: status
+  }
+});
 
 const cache = (state = {}, action) => {
   const { payload } = action;
 
   switch (action.type) {
     case FETCH_REQUEST:
-      return {
-        ...state,
-        [payload.dataType]: {
-          ...(state[payload.dataType] || {}),
-          [payload.ref]: PENDING
-        }
-      };
+      return setStatus(state, payload.dataType, payload.ref, PENDING);
     case FETCH_RECEIVE:
-      return {
-        ...state,
-        [payload.dataType]: {
-          ...(state[payload.dataType] || {}),
-          [payload.ref]: LOADED
-        }
-      };
+      return setStatus(state, payload.dataType, payload.ref, LOADED);
     case FETCH_CREATE_REQUEST:
-      return {
-        ...state,
-        [payload.dataType]: {
-          ...(state[payload.dataType] || {}),
-          [payload.tempId]: PENDING
-        }
-      };
+      return setStatus(state, payload.dataType, payload.tempId, PENDING);
     case FETCH_CREATE_RECEIVE:
-      return {
-        ...state,
-        [payload.dataType]: {
-          ...(state[payload.dataType] || {}),
-          [payload.tempId]: LOADED
-        }
-      };
+      return setStatus(state, payload.dataType, payload.tempId, LOADED);
     case FETCH_DELETE_REQUEST:
-      return {
-        ...state,
-        [payload.dataType]: {
-          ...(state[payload.dataType] || {}),
-          [payload.id]: PENDING
-        }
-      };
+      return setStatus(state, payload.dataType, payload.id, PENDING);
     case FETCH_DELETE_RECEIVE:
-      return {
-        ...state,
-        [payload.dataType]: {
-          ...(state[payload.dataType] || {}),
-          [payload.id]: NOT_LOADED
-        }
-      };
+      return setStatus(state, payload.dataType, payload.id, NOT_LOADED);
     default:
       return state;
   }
