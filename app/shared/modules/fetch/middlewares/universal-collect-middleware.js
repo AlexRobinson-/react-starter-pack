@@ -45,7 +45,6 @@ export const collectData = () => (dispatch, getState) => {
   const keys = getState().fetch.collect;
 
   keys.forEach(key => {
-    console.log('fetching key', key);
     fetch(`/api/collect/${key}`)
       .then(res => res.json())
       .then(res => dispatch(res));
