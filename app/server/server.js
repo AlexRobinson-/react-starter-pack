@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { ServerRouter, createServerRenderContext } from 'react-router';
 import indexPage from './views/index.pug';
 import { UniversalPromiseCollector } from './../shared/modules/fetch/middlewares/universal-promise-middleware';
+import { collectMiddleware, collectApi } from './../shared/modules/fetch/middlewares/universal-collect-middleware';
 let createStore = require('./../shared/create-store').default;
 let App = require('./../shared').default;
 
@@ -25,13 +26,16 @@ const app = express();
 
 app.use('/assets', express.static('build/assets'));
 
+
+app.get('/api/collect/:key', collectApi);
+
 app.get('*', async(req, res) => {
 
   const context = createServerRenderContext();
 
   const universalPromise = new UniversalPromiseCollector();
 
-  const store = createStore(undefined, universalPromise.middleware());
+  const store = createStore(undefined, [universalPromise.middleware(), collectMiddleware]);
 
   const render = () => renderToString(
     <ServerRouter

@@ -10,6 +10,7 @@ import {
 import { normalizeResponse } from './../../../utils/normalizr';
 import { withData } from './../../data/utils/action-creators';
 import universalPromise from './../middlewares/universal-promise-middleware';
+import { collectPromise } from './../middlewares/universal-collect-middleware';
 import actionCompose from './../../../utils/action-compose';
 import { selectors } from './../../../modules';
 import { PENDING, LOADED } from './../constants/fetch-status';
@@ -39,6 +40,30 @@ export const fetchReceive = (dataType, ref, response) => actionCompose(
     normalizeResponse(dataType, response)
   )
 );
+
+export const fetchActionDeferred = (dataType, ref, promise) => (dispatch, getState) => {
+
+  const status = selectors.fetch.getFetchStatus(getState(), dataType, ref);
+
+  if (status === PENDING || status === LOADED) {
+    return;
+  }
+
+  dispatch(collectPromise(fetchRequest(dataType, ref), (res, rej) => {
+      try {
+        Promise
+          .resolve(promise)
+          .then(response => {
+            dispatch(fetchReceive(dataType, ref, response));
+            res(fetchReceive(dataType, ref, response));
+          });
+      } catch (err) {
+        console.error(err);
+        rej(err);
+      }
+    }
+  ));
+};
 
 export const fetchAction = (dataType, ref, promise) => (dispatch, getState) => universalPromise(
   (res, rej) => {
