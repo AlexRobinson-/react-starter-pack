@@ -10,10 +10,10 @@ import {
 import { normalizeResponse } from './../../../utils/normalizr';
 import { withData } from './../../data/utils/action-creators';
 import universalPromise from './../middlewares/universal-promise-middleware';
-import { collectPromise } from './../middlewares/universal-collect-middleware';
 import actionCompose from './../../../utils/action-compose';
 import { selectors } from './../../../modules';
 import { PENDING, LOADED } from './../constants/fetch-status';
+import { withCollect, withUniversalPromise } from './compose';
 
 /*****
  * Get items
@@ -49,29 +49,64 @@ export const fetchActionDeferred = (dataType, ref, promise) => (dispatch, getSta
     return;
   }
 
-  dispatch(collectPromise(fetchRequest(dataType, ref), (res, rej) => {
-      try {
-        Promise
-          .resolve(promise)
-          .then(response => {
-            dispatch(fetchReceive(dataType, ref, response));
-            res(fetchReceive(dataType, ref, response));
-          });
-      } catch (err) {
-        console.error(err);
-        rej(err);
-      }
-    }
-  ));
+  dispatch(
+    actionCompose(
+      { dispatch, getState },
+      fetchRequest(dataType, ref),
+      withCollect((res, rej) => {
+          try {
+            Promise
+              .resolve(promise)
+              .then(response => {
+                dispatch(fetchReceive(dataType, ref, response));
+                res(fetchReceive(dataType, ref, response));
+              });
+          } catch (err) {
+            console.error(err);
+            rej(err);
+          }
+        }
+      )
+    )
+  );
 };
 
-export const fetchAction = (dataType, ref, promise) => (dispatch, getState) => universalPromise(
-  (res, rej) => {
-    const status = selectors.fetch.getFetchStatus(getState(), dataType, ref);
+export const fetchAction = (dataType, ref, promise) => (dispatch, getState) => {
+  const status = selectors.fetch.getFetchStatus(getState(), dataType, ref);
 
-    if (status === PENDING || status === LOADED) {
-      return;
-    }
+  if (status === PENDING || status === LOADED) {
+    return;
+  }
+
+  dispatch(
+    actionCompose(
+      { dispatch, getState },
+      fetchRequest(dataType, ref),
+      withUniversalPromise(
+        (res, rej) => {
+          try {
+            Promise
+              .resolve(promise)
+              .then(response => {
+                dispatch(fetchReceive(dataType, ref, response));
+                res();
+              });
+          } catch (err) {
+            console.error(err);
+            rej(err);
+          }
+        },
+        () => ({
+          type: FETCH_FAILURE
+        })
+      )
+    )
+  );
+};
+
+export const fetchAction2 = (dataType, ref, promise) => (dispatch, getState) => universalPromise(
+  (res, rej) => {
+
 
     dispatch(fetchRequest(dataType, ref));
 

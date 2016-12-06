@@ -2,23 +2,24 @@ const UNIVERSAL_PROMISE = 'UNIVERSAL_PROMISE';
 
 class UniversalPromiseCollector {
 
-  constructor () {
+  constructor() {
     this.promises = [];
   }
 
-  middleware () {
+  middleware() {
     return ({ dispatch, getState }) => next => action => {
 
       const result = next(action);
 
-      if (!result || !result.__universal) {
+      if (!action || !action.meta || !action.meta.universalPromise) {
         return result;
       }
 
-      const { cancelAction } = result.__universal;
+
+      const { cancelAction, promise } = action.meta.universalPromise;
 
       const config = {
-        promise: result,
+        promise,
         cancelAction
       };
 
@@ -27,16 +28,18 @@ class UniversalPromiseCollector {
       config.promise.then(() => {
         this.promises = this.promises.filter(x => x !== config)
       });
+
+      return result;
     }
   }
 
-  cancelPromises () {
+  cancelPromises() {
     this.promises.forEach(config => {
       config.cancelAction()
     });
   }
 
-  awaitPromises () {
+  awaitPromises() {
     return Promise.all(this.promises.map(x => x.promise));
   }
 }
