@@ -14,7 +14,7 @@ export const fetchTodos = () => fetchAction(TODO_TYPE, 'all', todoApi.getTodos()
 
 export const createTodo = todo => fetchCreateAction(TODO_TYPE, todo, todoApi.createTodo(todo),
   {
-    onSuccess: withToast('Created Todo')
+    onSuccess: () => withToast('Created Todo')
   }
 );
 

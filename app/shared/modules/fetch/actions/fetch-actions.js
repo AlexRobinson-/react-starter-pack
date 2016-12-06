@@ -175,7 +175,9 @@ export const fetchCreateAction = (dataType, data, promise, config = {}) => async
     dispatch(
       actionCompose(
         fetchCreateReceive(dataType, response, tempId),
-        action => config.onSuccess(action, { dispatch, getState })
+        typeof config.onSuccess === 'function'
+          ? config.onSuccess({ dispatch, getState })
+          : config.onSuccess
       )
     );
   } catch (err) {
