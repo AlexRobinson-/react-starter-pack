@@ -27,7 +27,6 @@ export const fetchRequest = (dataType, ref) => ({
 });
 
 export const fetchReceive = (dataType, ref, response) => actionCompose(
-  undefined,
   {
     type: FETCH_RECEIVE,
     payload: {
@@ -50,7 +49,6 @@ export const fetchActionDeferred = (dataType, ref, promise) => (dispatch, getSta
 
   dispatch(
     actionCompose(
-      { dispatch, getState },
       fetchRequest(dataType, ref),
       withCollect((res, rej) => {
           try {
@@ -79,7 +77,6 @@ export const fetchAction = (dataType, ref, promise) => (dispatch, getState) => {
 
   dispatch(
     actionCompose(
-      { dispatch, getState },
       fetchRequest(dataType, ref),
       withUniversalPromise(
         (res, rej) => {
@@ -132,7 +129,6 @@ export const fetchAction2 = (dataType, ref, promise) => (dispatch, getState) => 
  */
 
 export const fetchCreateRequest = (dataType, data, tempId) => actionCompose(
-  undefined,
   {
     type: FETCH_CREATE_REQUEST,
     payload: {
@@ -144,7 +140,6 @@ export const fetchCreateRequest = (dataType, data, tempId) => actionCompose(
 );
 
 export const fetchCreateReceive = (dataType, response, tempId) => actionCompose(
-  undefined,
   {
     type: FETCH_CREATE_RECEIVE,
     payload: {
@@ -179,9 +174,8 @@ export const fetchCreateAction = (dataType, data, promise, config = {}) => async
     const response = await promise;
     dispatch(
       actionCompose(
-        { dispatch, getState },
         fetchCreateReceive(dataType, response, tempId),
-        config.onSuccess
+        action => config.onSuccess(action, { dispatch, getState })
       )
     );
   } catch (err) {
@@ -203,7 +197,6 @@ export const fetchDeleteRequest = (dataType, id) => ({
 });
 
 export const fetchDeleteReceive = (dataType, id) => actionCompose(
-  undefined,
   {
     type: FETCH_DELETE_RECEIVE,
     payload: {
@@ -226,9 +219,10 @@ export const fetchDeleteAction = (dataType, id, promise, config = {}) => async(d
 
     dispatch(
       actionCompose(
-        { dispatch, getState },
         fetchDeleteReceive(dataType, id),
-        config.onSuccess
+        typeof config.onSuccess === 'function'
+          ? config.onSuccess({ dispatch, getState })
+          : config.onSuccess
       )
     );
 

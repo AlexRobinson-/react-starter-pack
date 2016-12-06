@@ -86,7 +86,7 @@ export default (SERVER, PROD) => {
   const config = {
     entry,
     output,
-    devtool: 'eval',
+    devtool: 'source-map',
     module: {
       rules
     },

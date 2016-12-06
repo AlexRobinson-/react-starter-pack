@@ -21,8 +21,8 @@ export const createTodo = todo => fetchCreateAction(TODO_TYPE, todo, todoApi.cre
 export const deleteTodo = id => fetchDeleteAction(
   TODO_TYPE, id, todoApi.deleteTodo(id),
   {
-    onSuccess: [
-      (action, { getState }) => withToast(`Deleted Todo - ${getTodo(getState(), id).title}`)(action),
+    onSuccess: ({ getState }) => [
+      withToast(`Deleted Todo - ${getTodo(getState(), id).title}`),
       withToast('Deleted Todo')
     ]
   }
