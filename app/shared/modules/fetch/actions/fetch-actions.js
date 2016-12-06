@@ -9,7 +9,6 @@ import {
 } from './../constants/action-types';
 import { normalizeResponse } from './../../../utils/normalizr';
 import { withData } from './../../data/utils/action-creators';
-import universalPromise from './../middlewares/universal-promise-middleware';
 import actionCompose from './../../../utils/action-compose';
 import { selectors } from './../../../modules';
 import { PENDING, LOADED } from './../constants/fetch-status';

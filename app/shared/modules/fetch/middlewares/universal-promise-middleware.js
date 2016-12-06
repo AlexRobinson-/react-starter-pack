@@ -15,7 +15,6 @@ class UniversalPromiseCollector {
         return result;
       }
 
-
       const { cancelAction, promise } = action.meta.universalPromise;
 
       const config = {
@@ -44,17 +43,6 @@ class UniversalPromiseCollector {
   }
 }
 
-const universalPromise = (callback, cancelAction) => {
-  const p = new Promise(callback);
-  p.__universal = {
-    cancelAction
-  };
-  return p;
-};
-
-export default universalPromise;
-
 export {
-  universalPromise,
   UniversalPromiseCollector
 }
